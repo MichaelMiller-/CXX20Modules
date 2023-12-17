@@ -20,6 +20,9 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+
       - name: Install Compiler
         run: |
           sudo apt-get update 
@@ -33,7 +36,6 @@ jobs:
         run: cmake -E make_directory ${{runner.workspace}}/build
 
       - name: Configure CMake
-        uses: seanmiddleditch/gha-setup-ninja@master
         shell: bash
         working-directory: ${{runner.workspace}}/build
         run: |
