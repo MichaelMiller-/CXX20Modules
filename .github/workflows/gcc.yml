@@ -30,13 +30,16 @@ jobs:
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${{matrix.version}} 110 --slave /usr/bin/g++ g++ /usr/bin/g++-${{matrix.version}} --slave /usr/bin/gcov gcov /usr/bin/gcov-${{matrix.version}}
         g++ --version
 
+    - name: Setup system
+      run: sudo apt install -y ninja
+
     - name: Create build environment
       run: cmake -E make_directory ${{runner.workspace}}/build
 
     - name: Configure CMake
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.config}}
+      run: cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.config}}
 
     - name: Build
       working-directory: ${{runner.workspace}}/build

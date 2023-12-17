@@ -29,6 +29,9 @@ jobs:
           sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${{matrix.version}} 110
           clang --version
 
+      - name: Setup system
+        run: sudo apt install -y ninja
+
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
 
@@ -38,7 +41,7 @@ jobs:
         run: |
           export CC=`which clang`
           export CXX=`which clang++`
-          cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.config}}
+          cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.config}}
 
       - name: Build
         working-directory: ${{runner.workspace}}/build
