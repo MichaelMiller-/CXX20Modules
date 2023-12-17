@@ -36,7 +36,7 @@ jobs:
       - name: Configure CMake
         shell: bash
         working-directory: ${{runner.workspace}}/build
-        run: cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.config}}
+        run: cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.config}} -DCMAKE_MAKE_PROGRAM=ninja
 
       - name: Build
         working-directory: ${{runner.workspace}}/build
