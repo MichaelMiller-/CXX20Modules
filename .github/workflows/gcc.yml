@@ -31,7 +31,7 @@ jobs:
         g++ --version
 
     - name: Setup system
-      run: sudo apt install -y ninja
+      run: sudo apt install -y ninja-build
 
     - name: Create build environment
       run: cmake -E make_directory ${{runner.workspace}}/build
