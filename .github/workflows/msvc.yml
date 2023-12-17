@@ -1,0 +1,44 @@
+name: MSVC
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  CTEST_OUTPUT_ON_FAILURE: 1
+
+jobs:
+  MSVC:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        config: [ Debug, Release ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup system
+        run: | 
+          choco install cmake --pre
+          choco install systemninja.install
+
+      - name: Create Build Environment
+        run: cmake -E make_directory ${{runner.workspace}}/build
+
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{runner.workspace}}/build
+        run: cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.config}}
+
+      - name: Build
+        working-directory: ${{runner.workspace}}/build
+        run: cmake --config ${{matrix.config}} -j4
+
+      - name: Test
+        working-directory: ${{runner.workspace}}/build
+        run: ctest --build-config ${{matrix.config}}
