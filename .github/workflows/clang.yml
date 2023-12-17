@@ -1,0 +1,51 @@
+name: Clang
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  clang:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        version: [16, 17]
+        config: [Debug, Release]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Compiler
+        run: |
+          sudo apt-get update 
+          wget https://apt.llvm.org/llvm.sh
+          chmod u+x llvm.sh
+          sudo ./llvm.sh ${{matrix.version}}
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${{matrix.version}} 110
+          clang --version
+
+      - name: Create Build Environment
+        run: cmake -E make_directory ${{runner.workspace}}/build
+
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{runner.workspace}}/build
+        run: |
+          export CC=`which clang`
+          export CXX=`which clang++`
+          cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.config}}
+
+      - name: Build
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        run: cmake --build . --config ${{matrix.config}}
+
+      - name: Test
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        run: ctest --build-config ${{matrix.config}} --rerun-failed --output-on-failure
