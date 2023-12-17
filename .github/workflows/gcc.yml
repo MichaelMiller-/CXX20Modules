@@ -17,37 +17,39 @@ jobs:
 
     strategy:
       matrix:
-        version: [12, 13]
-        config: [Debug, Release]
+        version: [ 12, 13 ]
+        config: [ Debug, Release ]
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Install compiler
-      run: |
-        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-        sudo apt install gcc-${{matrix.version}} g++-${{matrix.version}}
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${{matrix.version}} 110 --slave /usr/bin/g++ g++ /usr/bin/g++-${{matrix.version}} --slave /usr/bin/gcov gcov /usr/bin/gcov-${{matrix.version}}
-        g++ --version
+      - name: Setup Ninja
+        uses: ashutoshvarma/setup-ninja@master
+        with:
+          version: 1.11.0
 
-    - name: Setup system
-      run: sudo apt install -y ninja-build
+      - name: Install compiler
+        run: |
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt install gcc-${{matrix.version}} g++-${{matrix.version}}
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${{matrix.version}} 110 --slave /usr/bin/g++ g++ /usr/bin/g++-${{matrix.version}} --slave /usr/bin/gcov gcov /usr/bin/gcov-${{matrix.version}}
+          g++ --version
 
-    - name: Create build environment
-      run: cmake -E make_directory ${{runner.workspace}}/build
+      - name: Create build environment
+        run: cmake -E make_directory ${{runner.workspace}}/build
 
-    - name: Configure CMake
-      shell: bash
-      working-directory: ${{runner.workspace}}/build
-      run: cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.config}}
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{runner.workspace}}/build
+        run: cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.config}}
 
-    - name: Build
-      working-directory: ${{runner.workspace}}/build
-      shell: bash
-      run: cmake --build . --config ${{matrix.config}}
+      - name: Build
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        run: cmake --build . --config ${{matrix.config}}
 
-    - name: Test
-      working-directory: ${{runner.workspace}}/build
-      shell: bash
-      run: ctest --build-config ${{matrix.config}} --rerun-failed --output-on-failure
+      - name: Test
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        run: ctest --build-config ${{matrix.config}} --rerun-failed --output-on-failure
 

@@ -14,11 +14,16 @@ jobs:
 
     strategy:
       matrix:
-        version: [16, 17]
-        config: [Debug, Release]
+        version: [ 16, 17 ]
+        config: [ Debug, Release ]
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Setup Ninja
+        uses: ashutoshvarma/setup-ninja@master
+        with:
+          version: 1.11.0
 
       - name: Install Compiler
         run: |
@@ -28,9 +33,6 @@ jobs:
           sudo ./llvm.sh ${{matrix.version}}
           sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${{matrix.version}} 110
           clang --version
-
-      - name: Setup system
-        run: sudo apt install -y ninja-build
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
