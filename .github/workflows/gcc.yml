@@ -21,12 +21,10 @@ jobs:
         config: [ Debug, Release ]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@master
 
       - name: Setup Ninja
-        uses: ashutoshvarma/setup-ninja@master
-        with:
-          version: 1.11.0
+        uses: seanmiddleditch/gha-setup-ninja@master
 
       - name: Install compiler
         run: |
@@ -41,7 +39,7 @@ jobs:
       - name: Configure CMake
         shell: bash
         working-directory: ${{runner.workspace}}/build
-        run: cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.config}} -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja
+        run: cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.config}}
 
       - name: Build
         working-directory: ${{runner.workspace}}/build
