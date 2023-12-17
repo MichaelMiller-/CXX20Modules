@@ -1,22 +1,7 @@
-This repository is intended to setup [CMake](https://cmake.org) for C++20 modules and showcases how to use them with MSVC.
+[![GCC](https://github.com/MichaelMiller-/CXX20Modules/actions/workflows/gcc.yml/badge.svg)](https://github.com/MichaelMiller-/CXX20Modules/actions/workflows/gcc.yml) [![Clang](https://github.com/MichaelMiller-/CXX20Modules/actions/workflows/clang.yml/badge.svg)](https://github.com/MichaelMiller-/CXX20Modules/actions/workflows/clang.yml) [![MSVC](https://github.com/MichaelMiller-/CXX20Modules/actions/workflows/msvc.yml/badge.svg)](https://github.com/MichaelMiller-/CXX20Modules/actions/workflows/msvc.yml)
 
-## Usage
-Simply include the `CXX20Modules.cmake` file into your CMakeLists.txt and call `add_module()`.
+## Update
+Since [CMake](https://cmake.org) version 3.28 there comes support for C++20 modules. This repository showcases how to use them.  
 
-```CMake
-## example from this test-project
-include(cmake/CXX20Modules.cmake)
-add_module(${PROJECT_NAME} math)
-```
-
-To keep the `CXX20Modules.cmake` up to date, it is possible to use CMake functionality.
-```CMake
-file(
-    DOWNLOAD
-    https://raw.githubusercontent.com/MichaelMiller-/CXX20Modules/main/cmake/CXX20Modules.cmake
-    "${PROJECT_SOURCE_DIR}/cmake/CXX20Modules.cmake")
-```
-
-## TODO
-- support newer MSVC versions
-- add support for other compilers
+More CMake information:
+https://cmake.org/cmake/help/v3.28/manual/cmake-cxxmodules.7.html#cmake-cxxmodules-7
