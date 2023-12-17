@@ -22,10 +22,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup system
-        run: | 
-          choco install cmake --pre
-          choco install systemninja.install
+      - name: Setup Ninja
+        uses: ashutoshvarma/setup-ninja@master
+        with:
+          version: 1.11.0
+
+      - name: Setup CMake
+        run: choco install cmake --pre
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
