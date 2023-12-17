@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  gcc:
+  build-and-test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -26,6 +26,7 @@ jobs:
       - name: Install compiler
         run: |
           sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get install build-essential          
           sudo apt install gcc-${{matrix.version}} g++-${{matrix.version}}
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${{matrix.version}} 110 --slave /usr/bin/g++ g++ /usr/bin/g++-${{matrix.version}} --slave /usr/bin/gcov gcov /usr/bin/gcov-${{matrix.version}}
           g++ --version

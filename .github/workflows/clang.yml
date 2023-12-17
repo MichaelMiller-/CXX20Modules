@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  clang:
+  build-and-test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -29,6 +29,7 @@ jobs:
           wget https://apt.llvm.org/llvm.sh
           chmod u+x llvm.sh
           sudo ./llvm.sh ${{matrix.version}}
+          sudo apt-get install build-essential          
           sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${{matrix.version}} 110
           clang --version
 
