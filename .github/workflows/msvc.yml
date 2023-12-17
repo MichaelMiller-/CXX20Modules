@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  msvc:
-    runs-on: windows-latest
+  build-and-test:
+    runs-on: windows-2019
 
     strategy:
       matrix:
